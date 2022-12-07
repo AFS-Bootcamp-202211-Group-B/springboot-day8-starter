@@ -45,4 +45,23 @@ public class CompanyServerTest {
         // 2. verify interaction
         verify(companyRepository).findAll();  // spy
     }
+
+    @Test
+    void should_return_company_by_id_when_get_by_id_given_companies() {
+        //given
+        List<Company> companies = new ArrayList<>();
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
+        employees.add(employee);
+        Company company = new Company(1,"abc company",employees);
+        companies.add(company);
+        when(companyRepository.findById(company.getId())).thenReturn(company); //stub
+        //when
+        Company foundCompany = companyService.findById(company.getId());
+        //then
+        assertThat(foundCompany,equalTo(company));
+        verify(companyRepository).findById(company.getId());
+        //then
+
+    }
 }

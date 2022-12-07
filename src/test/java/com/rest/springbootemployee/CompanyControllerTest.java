@@ -172,4 +172,22 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("New Company"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber());
     }
+
+    @Test
+    void should_delete_company_when_perform_delete_given_companies() throws Exception {
+        //given
+        Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+        Employee bob = employeeRepository.create(new Employee(11, "Bob", 23, "Male", 10000));
+        List<Employee> employees = new ArrayList<>();
+        employees.add(susan);
+        employees.add(bob);
+        Company company = companyRepository.create(new Company(10, "abc company", employees));
+
+        //then
+        client.perform(MockMvcRequestBuilders.delete("/companies/{id}", company.getId()))
+                // 1. assert response status
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+        List<Company> companies = companyRepository.findAll();
+        assertThat(companies,hasSize(0));
+    }
 }

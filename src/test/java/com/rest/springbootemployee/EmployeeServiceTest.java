@@ -13,6 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -83,6 +84,21 @@ public class EmployeeServiceTest {
         assertEquals(female, result);
         verify(employeeRepository).findByGender("Female");//spy
     }
+
+    @Test
+    void should_return_null_and_delete_when_delete_by_gender_given_employees(){
+        //given
+        Employee employee = new Employee(1,"Susan",22,"Female",10000);
+
+        //when
+        Employee result = employeeService.delete(1);
+
+        //then
+        assertNull(result);
+        verify(employeeRepository).delete(1);//spy
+    }
+
+
 }
 
 //verify interaction

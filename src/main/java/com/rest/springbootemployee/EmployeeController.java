@@ -48,13 +48,13 @@ public class EmployeeController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer id) {
-        employeeRepository.delete(id);
+        employeeservice.delete(id);
     }
 
 
     @GetMapping(params = {"page", "pageSize"})
     public List<Employee> getByPage(int page, int pageSize) {
-        return employeeRepository.findByPage(page, pageSize);
+        return employeeservice.findByPage(page, pageSize);
     }
 
 }

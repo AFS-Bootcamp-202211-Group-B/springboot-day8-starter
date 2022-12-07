@@ -42,4 +42,13 @@ public class EmployeeService {
         return employeeRepository.create(employee);
     }
 
+
+    public Employee delete(Integer id) {
+        return employeeRepository.delete(id);
+    }
+
+    public List<Employee> findByPage(int page, int pageSize){
+        return employeeRepository.findByPage(page , pageSize);
+    }
+
 }

@@ -51,9 +51,10 @@ public class EmployeeRepository {
 
 
 
-    public void delete(Integer id) {
+    public Employee delete(Integer id) {
         Employee existingEmployee = findById(id);
         employees.remove(existingEmployee);
+        return null;
     }
 
     public List<Employee> findByPage(int page, int pageSize) {

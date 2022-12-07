@@ -81,15 +81,19 @@ public class EmployeeServerTest {
 
     }
 
-//    @Test
-//    void should_when_given() {
-//        //given
-//
-//        //when
-//
-//        //then
-//
-//    }
+    @Test
+    void should_return_by_id_when_find_by_id_given_employees() {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
+        employees.add(employee);
+        when(employeeRepository.findById(employee.getId())).thenReturn(employee); //stub
+        //when
+        Employee foundEmployee = employeeService.findById(employee.getId());
+        //then
+        assertThat(foundEmployee,equalTo(employee));
+        verify(employeeRepository).findById(employee.getId());
+    }
 
 
 }

@@ -22,6 +22,11 @@ public class EmployeeService { //SUT
     // when EmployeeService.update is called, it will call employeeRepository.findById(id)
     //  2. verify data
     // when input an employee, only the age and salary will be changed, name and gender will not change.
+    public Employee findById(Integer id){
+        return employeeRepository.findById(id);
+    }
+
+
     public Employee update(Integer id, Employee employee) {
         Employee existingEmployee = employeeRepository.findById(id);
         if (employee.getAge() != null) {

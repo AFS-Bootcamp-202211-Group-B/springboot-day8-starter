@@ -70,4 +70,25 @@ public class CompanyServiceTest {
         assertEquals(employeesOfCompany1, result);
         verify(companyRepository).getEmployees(companyId);//spy
     }
+
+    @Test
+    void should_return_company_by_page_and_pageSize_when_get_by_page_and_pageSize_given_companies(){
+        //given
+        Company company1 = new Company(1,"company1",new ArrayList<>());
+        Company company2 = new Company(2,"company2",new ArrayList<>());
+        List<Company> companies = new ArrayList<>();
+        companies.add(company1);
+        companies.add(company2);
+        int page=1;
+        int pageSize=2;
+
+        when(companyRepository.findByPage(page,pageSize)).thenReturn(companies); //stub
+
+        //when
+        List<Company> result= companyService.findByPage(page,pageSize);
+
+        //then
+        assertEquals(companies, result);
+        verify(companyRepository).findByPage(page,pageSize);//spy
+    }
 }

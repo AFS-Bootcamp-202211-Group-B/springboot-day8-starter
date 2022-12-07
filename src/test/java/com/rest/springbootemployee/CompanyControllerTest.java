@@ -51,6 +51,27 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isNumber())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("abc company"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].employees").isArray());
+    }
 
+    @Test
+    void should_get_companies_by_id_when_perform_get_by_id_given_companies() throws Exception {
+        //given
+        Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+        Employee bob = employeeRepository.create(new Employee(11, "Bob", 23, "Male", 10000));
+        List<Employee> employees = new ArrayList<>();
+        employees.add(susan);
+        employees.add(bob);
+        Company company = companyRepository.create(new Company(10,"abc company",employees));
+
+        //when & then
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}",company.getId()))
+                // 1. assert response status
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                // 2. assert response data
+
+
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("abc company"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees").isArray());
     }
 }

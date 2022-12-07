@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 
@@ -30,10 +31,8 @@ public class CompanyControllerTest {
     @Test
     void should_get_all_companies_when_perform_get_given_companies() throws Exception {
         // given
-        ArrayList<Employee> employeesOfCompany1 = new ArrayList<>();
-        employeesOfCompany1.add(new Employee(1, "Carlos", 26, "Male", 70000));
-        employeesOfCompany1.add(new Employee(2, "Nicole", 22, "Female", 80000));
-        companyRepository.create(new Company(100, "spring", employeesOfCompany1));
+        Company company = new Company(1, "spring", null);
+        companyRepository.create(company);
 
         // when & then
         client.perform(MockMvcRequestBuilders.get("/companies"))
@@ -41,9 +40,7 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 // 2. assert response data
                 .andExpect(MockMvcResultMatchers.jsonPath("$",hasSize(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isNumber())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("spring"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].employees",hasSize(2)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("spring"));
 
     }
 }

@@ -1,10 +1,12 @@
 package com.rest.springbootemployee;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -91,5 +93,25 @@ public class SpringBootCompanyControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].id", containsInAnyOrder(spring.getId(), summer.getId())));
 
 
+    }
+
+    @Test
+    void should_post_company_by_given_company() throws Exception{
+        Company OOcL = companyRepository.create(new Company(100, "OOCL", new ArrayList<>()));
+
+
+
+        client.perform(MockMvcRequestBuilders.post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(OOcL)))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("OOCL"));
+
+
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}",OOcL.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("OOCL"));
     }
 }

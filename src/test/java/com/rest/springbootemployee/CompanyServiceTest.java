@@ -113,4 +113,25 @@ public class CompanyServiceTest {
         assertEquals(company1, result);
         verify(companyRepository).create(company1);//spy
     }
+
+    @Test
+    void should_update_name_when_update_given_companies(){
+        //given
+        int companyId= 1;
+        List<Employee> employeesOfCompany1 = new ArrayList<>();
+        employeesOfCompany1.add(new Employee(1, "Carlos", 26, "Male", 70000));
+        employeesOfCompany1.add(new Employee(2, "Nicole", 22, "Female", 80000));
+        Company company = new Company(1,"oldCompanyName",employeesOfCompany1);
+        when(companyRepository.findById(companyId)).thenReturn(company);
+        Company updatedCompany = new Company(1,"newCompanyName",new ArrayList<>());
+
+        //when
+        Company result = companyService.update(companyId,updatedCompany);
+
+
+        //then
+        verify(companyRepository).findById(companyId);
+        assertEquals("newCompanyName",result.getName());
+        assertEquals(employeesOfCompany1,result.getEmployees());
+    }
 }

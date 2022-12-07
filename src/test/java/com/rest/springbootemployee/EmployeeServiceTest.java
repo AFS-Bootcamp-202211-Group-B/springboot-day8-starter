@@ -60,5 +60,27 @@ class EmployeeServiceTest {
         assertThat(updatedEmployee.getGender(), equalTo("Female"));
     }
 
+    @Test
+    void should_find_employee_by_id_when_find_given_employees() {
+        //given
+        int employeeId = 2;
+        List<Employee> employees = new ArrayList<>();
+        Employee employee1 = new Employee(10, "Susan", 22, "Female", 10000);
+        Employee employee2 = new Employee(11, "Tom", 23, "Male", 12000);
+        employees.add(employee1);
+        employees.add(employee2);
+
+        when(employeeRepository.findById(employeeId)).thenReturn(employee2); //stub
+        //when
+        Employee resultEmployee = employeeService.findById(employeeId);
+        //then
+        verify(employeeRepository).findById(employeeId); //spy
+        //1. verify data
+        assertThat(resultEmployee.getAge(), equalTo(23));
+        assertThat(resultEmployee.getSalary(), equalTo(12000));
+        assertThat(resultEmployee.getName(), equalTo("Tom"));
+        assertThat(resultEmployee.getGender(), equalTo("Male"));
+
+    }
 
 }

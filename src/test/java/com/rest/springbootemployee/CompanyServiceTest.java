@@ -39,4 +39,21 @@ public class CompanyServiceTest {
         assertEquals(companies, actual);
     }
 
+    @Test
+    void should_return_a_company_when_get_company_given_company_id() {
+        //given
+        List<Company> companies = new ArrayList<>();
+        Company summer = companyRepository.create(new Company(101, "summer", new ArrayList<>()));
+
+
+
+        when(companyRepository.findById(101)).thenReturn(summer); //stub
+
+        //when
+        Company result= companyService.findById(101);
+
+        //then
+        assertEquals(summer, result);
+        verify(companyRepository).findById(101);//spy
+    }
 }

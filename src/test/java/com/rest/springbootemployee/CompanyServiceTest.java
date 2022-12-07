@@ -59,6 +59,54 @@ class CompanyServiceTest {
         assertEquals(company1, returnedCompany);
         verify(companyRepository).findById(1);
     }
+
+    @Test
+    void should_get_employees_when_find_employees_given_companies() {
+        // given
+        List<Employee> employees = new ArrayList<>();
+        Employee employee1 = new Employee(10,"one",22,"female",10000);
+        Employee employee2 = new Employee(10,"two",21,"male",11000);
+        employees.add(employee1);
+        employees.add(employee2);
+        List<Company> companies = new ArrayList<>();
+        Company company1 = new Company(1, "one", employees);
+        Company company2 = new Company(2, "two", null);
+        companies.add(company1);
+        companies.add(company2);
+        when(companyRepository.getEmployees(1)).thenReturn(employees);
+
+        // when
+        List<Employee> resultList = companyService.getEmployees(1);
+
+        // then
+        assertEquals(employees,resultList);
+        verify(companyRepository).getEmployees(1);
+    }
+
+    @Test
+    void should_get_companies_by_page_when_find_by_page_given_companies() {
+        // given
+        Company company1 = new Company(1, "one", null);
+        Company company2 = new Company(2, "two", null);
+        Company company3 = new Company(3, "three", null);
+        Company company4 = new Company(4, "four", null);
+        companyRepository.create(company1);
+        companyRepository.create(company2);
+        companyRepository.create(company3);
+        companyRepository.create(company4);
+        List<Company> companies = new ArrayList<>();
+        companies.add(company3);
+        companies.add(company4);
+        when(companyRepository.findByPage(2,2)).thenReturn(companies);
+
+        // when
+        List<Company> resultList = companyService.findByPage(2,2);
+
+        // then
+        assertThat(resultList,hasSize(2));
+        assertEquals(companies,resultList);
+        verify(companyRepository).findByPage(2,2);
+    }
     @Test
     void should_get_companies_by_page_query_when_get_given_companies_and_page_and_page_size() {
         // given

@@ -37,4 +37,8 @@ public class CompanyService {
     public void delete(Integer id) {
         companyRepository.delete(id);
     }
+
+    public List<Employee> getEmployees(Integer id) {
+        return companyRepository.getEmployees(id);
+    }
 }

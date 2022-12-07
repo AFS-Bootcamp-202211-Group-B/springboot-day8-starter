@@ -9,6 +9,7 @@ import java.util.List;
 @RequestMapping("/companies")
 public class CompanyController {
     private CompanyRepository companyRepository;
+    private CompanyService companyService;
 
     public CompanyController(CompanyRepository CompanyRepository) {
         this.companyRepository = CompanyRepository;
@@ -16,7 +17,7 @@ public class CompanyController {
 
     @GetMapping
     public List<Company> getAll() {
-        return companyRepository.findAll();
+        return companyService.findAll();
     }
 
     @GetMapping("/{id}")

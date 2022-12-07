@@ -128,4 +128,33 @@ public class SpringBootCompanyControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("spring"));
 
     }
+
+    @Test
+    void should_delete_company_by_given_id_company_when_perform() throws Exception{
+        Company spring = companyRepository.create(new Company(100, "spring", new ArrayList<>()));
+
+
+        client.perform(MockMvcRequestBuilders.delete("/companies/{id}",spring.getId()))
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").doesNotExist())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").doesNotExist());
+
+
+
+        client.perform(MockMvcRequestBuilders.get("/companies"))
+                //Then
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$",hasSize(0)));
+    }
+
+    @Test
+    void should_return_notfound_when_perform_get_given_company_and_falseId() throws Exception {
+        //given
+        Company spring = companyRepository.create(new Company(100, "spring", new ArrayList<>()));
+        companyRepository.delete(spring.getId());
+        //when
+        //then
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}",spring.getId()))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 }

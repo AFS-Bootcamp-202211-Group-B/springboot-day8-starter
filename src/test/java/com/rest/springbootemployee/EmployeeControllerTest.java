@@ -11,10 +11,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.awt.*;
+import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -102,6 +105,13 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("female"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(10000));
 
+        List<Employee> employees = employeeRepository.findAll();
+        assertThat(employees, hasSize(1));
+        Employee employee = employees.get(0);
+        assertThat(employee.getName(), equalTo("hi"));
+        assertThat(employee.getAge(), equalTo(22));
+        assertThat(employee.getGender(), equalTo("female"));
+        assertThat(employee.getSalary(), equalTo(10000));
     }
     @Test
     void should_get_employees_by_page_when_perform_get_given_employees() throws Exception {
@@ -125,21 +135,33 @@ public class EmployeeControllerTest {
     }
     @Test
     void should_delete_employees_when_perform_delete_given_employees() throws Exception {
-        // given
         employeeRepository.create(new Employee(11,"one",21,"male",11000));
         employeeRepository.create(new Employee(10,"two",22,"female",10000));
         employeeRepository.create(new Employee(12,"three",21,"male",11000));
 
-        // when & then
         client.perform(MockMvcRequestBuilders.delete("/employees/{id}",3))
-            // 1. assert response status
             .andExpect(MockMvcResultMatchers.status().isNoContent());
 
         Exception exception = assertThrows(NoEmployeeFoundException.class, () -> employeeRepository.findById(3));
         assertEquals("No employee found", exception.getMessage());
-
-
-
     }
+    @Test
+    void should_update_employees_when_perform_update_given_employee() throws Exception{
+        //given
+        employeeRepository.create(new Employee(11,"one",21,"male",11000));
+        //when
+
+        client.perform(MockMvcRequestBuilders.put("/employees/{id}",1)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"age\": 18,\"salary\": 60000}"))
+            .andExpect(MockMvcResultMatchers.status().isOk());
+
+        Employee employee = employeeRepository.findById(1);
+        assertEquals("one", employee.getName());
+        assertEquals(18, employee.getAge());
+        assertEquals("male", employee.getGender());
+        assertEquals(60000, employee.getSalary());
+    }
+
 
 }

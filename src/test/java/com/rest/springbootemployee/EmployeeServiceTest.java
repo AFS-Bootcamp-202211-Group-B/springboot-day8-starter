@@ -98,4 +98,16 @@ public class EmployeeServiceTest {
         assertEquals(femaleEmployees, result);
         verify(employeeRepository).findByGender(Female);//spy
     }
+
+    @Test
+    void should_delete_employees_id_when_delete_given_employees(){
+        //given
+        Employee employee = new Employee(1,"Susan",22,"Female",10000);
+
+        //when
+        employeeService.delete(1);
+
+        //then
+        verify(employeeRepository).delete(1);//spy
+    }
 }

@@ -96,6 +96,48 @@ public class EmployeeServerTest {
         verify(employeeRepository).findById(employee.getId());  // spy
     }
 
+    @Test
+    void should_return_specific_gender_employees_when_find_by_gender_given_employee_gender() {
+        //given
+        List<Employee> employees = new ArrayList<>();
+
+        Employee employee = new Employee(1, "Mark", 28, "Male", 2100);
+        Employee employee2 = new Employee(2, "Frank", 30, "Male", 3100);
+        employees.add(employee);
+        employees.add(employee2);
+
+        when(employeeRepository.findByGender(employee.getGender())).thenReturn(employees); //stub
+
+        //when
+        List<Employee>  result = employeeService.findByGender(employee.getGender());
+
+
+        //then
+        // 1. verify data
+        assertThat(result, hasSize(2));
+        assertThat(result.get(0), equalTo(employee));
+        // 2. verify interaction
+        verify(employeeRepository).findByGender(employee.getGender());  // spy
+    }
+
+    @Test
+    void should_return_employee_when_create_given_employee() {
+        //given
+        Employee employee = new Employee(1, "Mark", 28, "Male", 2100);
+        when(employeeRepository.create(employee)).thenReturn(employee); //stub
+
+        //when
+        Employee result = employeeService.create(employee);
+
+        //then
+        // 1. verify data
+        assertThat(result.getName(),equalTo("Mark"));
+        assertThat(result.getAge(),equalTo(28));
+        assertThat(result.getGender(),equalTo("Male"));
+        assertThat(result.getSalary(),equalTo(2100));
+        // 2. verify interaction
+        verify(employeeRepository).create(employee);  // spy
+    }
 
 
 }

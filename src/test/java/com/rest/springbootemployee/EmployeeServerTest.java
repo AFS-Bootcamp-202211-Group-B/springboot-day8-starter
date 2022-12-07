@@ -9,7 +9,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,8 +46,9 @@ public class EmployeeServerTest {
 
         //then
         // 1. verify data
-     //   assertThat(result, hasSize(1));
-     //   assertThat(result.get(0), equalTo(employee));
+
+        assertThat(result, hasSize(1));
+        assertThat(result.get(0), equalTo(employee));
         //assertEquals(employees, result);
         // 2. verify interaction
         verify(employeeRepository).findAll();  // spy
@@ -81,6 +82,15 @@ public class EmployeeServerTest {
         assertEquals(updatedEmployee.getAge(), 23);
         assertEquals(updatedEmployee.getSalary(), 12000);
 
+    }
+
+    @Test
+    void should_when_given() {
+        //given
+
+        //when
+
+        //then
 
     }
 

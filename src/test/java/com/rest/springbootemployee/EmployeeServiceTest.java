@@ -14,6 +14,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -98,10 +99,40 @@ public class EmployeeServiceTest {
         verify(employeeRepository).delete(1);//spy
     }
 
+    @Test
+    void should_return_employees_by_page_and_pageSize_when_get_by_page_and_pageSize_given_employees(){
+        //given
+        Employee employee1 = new Employee(1,"Susan",22,"Female",10000);
+        Employee employee2 = new Employee(1,"Susan",22,"Female",10000);
+        List<Employee> employees = new ArrayList<>();
+        employees.add(employee1);
+        employees.add(employee2);
+
+        when(employeeRepository.findByPage(1,2)).thenReturn(employees); //stub
+
+        //when
+        List<Employee> result= employeeService.findByPage(1,2);
+
+        //then
+        assertEquals(employees, result);
+        verify(employeeRepository).findByPage(1,2);//spy
+    }
+
+    @Test
+    void should_return_employees_when_create_given_employees(){
+        //given
+        Employee employee1 = new Employee(1,"Susan",22,"Female",10000);
+
+        when(employeeRepository.create(employee1)).thenReturn(employee1); //stub
+
+        //when
+
+
+        //then
+        Employee result = employeeService.create(employee1);
+        assertEquals(employee1, result);
+    }
+
 
 }
 
-//verify interaction
-//when EmployeeServce findAll is called ,it will can employeeRepository.findAll()
-//verify data
-//return the data get from e.findall without change

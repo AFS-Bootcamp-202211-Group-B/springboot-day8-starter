@@ -43,8 +43,8 @@ public class CompanyControllerTest {
         List<Employee> employees = new ArrayList<>();
         employees.add(susan);
         employees.add(bob);
-        companyRepository.create(new Company(10,"abc company",employees));
-        companyRepository.create(new Company(11, "def company",employees));
+        companyRepository.create(new Company(10, "abc company", employees));
+        companyRepository.create(new Company(11, "def company", employees));
 
         //when & then
         client.perform(MockMvcRequestBuilders.get("/companies"))
@@ -66,10 +66,10 @@ public class CompanyControllerTest {
         List<Employee> employees = new ArrayList<>();
         employees.add(susan);
         employees.add(bob);
-        Company company = companyRepository.create(new Company(10,"abc company",employees));
+        Company company = companyRepository.create(new Company(10, "abc company", employees));
 
         //when & then
-        client.perform(MockMvcRequestBuilders.get("/companies/{id}",company.getId()))
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}", company.getId()))
                 // 1. assert response status
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 // 2. assert response data
@@ -86,9 +86,9 @@ public class CompanyControllerTest {
         Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
         List<Employee> employees = new ArrayList<>();
         employees.add(susan);
-        Company company = companyRepository.create(new Company(10,"abc company",employees));
+        Company company = companyRepository.create(new Company(10, "abc company", employees));
         //when & Then
-        client.perform(MockMvcRequestBuilders.get("/companies/{id}/employees",company.getId()))
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}/employees", company.getId()))
                 // 1. assert response status
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 // 2. assert response data
@@ -107,11 +107,11 @@ public class CompanyControllerTest {
         List<Employee> employees = new ArrayList<>();
         employees.add(susan);
         employees.add(bob);
-        companyRepository.create(new Company(10,"abc company",employees));
-        companyRepository.create(new Company(11,"def company",employees));
+        companyRepository.create(new Company(10, "abc company", employees));
+        companyRepository.create(new Company(11, "def company", employees));
 
         //when & then
-        client.perform(MockMvcRequestBuilders.get("/companies?page={page}&pageSize={pageSize}",1,2))
+        client.perform(MockMvcRequestBuilders.get("/companies?page={page}&pageSize={pageSize}", 1, 2))
                 // 1. assert response status
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 // 2. assert response data
@@ -132,7 +132,7 @@ public class CompanyControllerTest {
         List<Employee> employees = new ArrayList<>();
         employees.add(susan);
         employees.add(bob);
-        Company newCompany = new Company(10,"abc company",employees);
+        Company newCompany = new Company(10, "abc company", employees);
 
         //when
         String newEmployeeJson = new ObjectMapper().writeValueAsString(newCompany);
@@ -144,9 +144,32 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("abc company"));
 
         List<Company> companies = companyRepository.findAll();
-        assertThat(companies,hasSize(1));
+        assertThat(companies, hasSize(1));
         Company company = companies.get(0);
-        assertThat(company.getName(),equalTo("abc company"));
+        assertThat(company.getName(), equalTo("abc company"));
 
+    }
+
+    @Test
+    void should_update_company_when_perform_put_given_companies() throws Exception {
+        //given
+        Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+        Employee bob = employeeRepository.create(new Employee(11, "Bob", 23, "Male", 10000));
+        List<Employee> employees = new ArrayList<>();
+        employees.add(susan);
+        employees.add(bob);
+        Company company = companyRepository.create(new Company(10, "abc company", employees));
+
+        company.setName("New Company");
+        //when
+        String newEmployeeJson = new ObjectMapper().writeValueAsString(company);
+        //then
+        client.perform(MockMvcRequestBuilders.put("/companies/{id}", company.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newEmployeeJson))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("New Company"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber());
     }
 }

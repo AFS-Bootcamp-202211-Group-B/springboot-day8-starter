@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.awt.*;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -120,6 +121,24 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value(21))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender").value("male"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(11000));
+
+    }
+    @Test
+    void should_delete_employees_when_perform_delete_given_employees() throws Exception {
+        // given
+        employeeRepository.create(new Employee(11,"one",21,"male",11000));
+        employeeRepository.create(new Employee(10,"two",22,"female",10000));
+        employeeRepository.create(new Employee(12,"three",21,"male",11000));
+
+        // when & then
+        client.perform(MockMvcRequestBuilders.delete("/employees/{id}",3))
+            // 1. assert response status
+            .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+        Exception exception = assertThrows(NoEmployeeFoundException.class, () -> employeeRepository.findById(3));
+        assertEquals("No employee found", exception.getMessage());
+
+
 
     }
 

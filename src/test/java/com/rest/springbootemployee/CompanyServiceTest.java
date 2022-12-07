@@ -74,5 +74,24 @@ public class CompanyServiceTest {
         verify(companyRepository).getEmployees(1);//spy
     }
 
+    @Test
+    void should_return_employees_by_page_and_pageSize_when_get_by_page_and_pageSize_given_employees(){
+        //given
+        Company summer = companyRepository.create(new Company(101, "summer", new ArrayList<>()));
+        Company spring = companyRepository.create(new Company(102, "spring", new ArrayList<>()));
+        List<Company> company = new ArrayList<>();
+        company.add(summer);
+        company.add(spring);
+
+        when(companyRepository.findByPage(1,2)).thenReturn(company); //stub
+
+        //when
+        List<Company> result= companyService.findByPage(1,2);
+
+        //then
+        assertEquals(company, result);
+        verify(companyRepository).findByPage(1,2);//spy
+    }
+
 
 }

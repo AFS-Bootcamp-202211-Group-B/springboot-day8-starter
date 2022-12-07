@@ -139,4 +139,21 @@ public class CompanyServerTest {
         assertThat(updatedCompany.getName(),equalTo("abc company"));
 
     }
+
+
+    @Test
+    void should_delete_company_when_delete_given_delete_company() {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
+        employees.add(employee);
+        Company company = new Company(1,"abc company",employees);
+        //when
+        List<Company> resultCompany = companyService.findAll();
+        //then
+
+        companyService.delete(company.getId());
+        assertThat(resultCompany, hasSize(0));
+        verify(companyRepository).delete(company.getId());
+    }
 }

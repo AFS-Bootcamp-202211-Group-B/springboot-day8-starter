@@ -58,4 +58,27 @@ class CompanyServiceTest {
         assertEquals(company1, returnedCompany);
         verify(companyRepository).findById(1);
     }
+
+    @Test
+    void should_get_employees_when_find_employees_given_companies() {
+        // given
+        List<Employee> employees = new ArrayList<>();
+        Employee employee1 = new Employee(10,"one",22,"female",10000);
+        Employee employee2 = new Employee(10,"two",21,"male",11000);
+        employees.add(employee1);
+        employees.add(employee2);
+        List<Company> companies = new ArrayList<>();
+        Company company1 = new Company(1, "one", employees);
+        Company company2 = new Company(2, "two", null);
+        companies.add(company1);
+        companies.add(company2);
+        when(companyRepository.getEmployees(1)).thenReturn(employees);
+
+        // when
+        List<Employee> resultList = companyService.getEmployees(1);
+
+        // then
+        assertEquals(employees,resultList);
+        verify(companyRepository).getEmployees(1);
+    }
 }

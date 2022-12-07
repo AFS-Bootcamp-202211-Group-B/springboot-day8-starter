@@ -75,7 +75,7 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_return_employees_by_page_and_pageSize_when_get_by_page_and_pageSize_given_employees(){
+    void should_return_company_by_page_and_pageSize_when_get_by_page_and_pageSize_given_company(){
         //given
         Company summer = companyRepository.create(new Company(101, "summer", new ArrayList<>()));
         Company spring = companyRepository.create(new Company(102, "spring", new ArrayList<>()));
@@ -93,5 +93,19 @@ public class CompanyServiceTest {
         verify(companyRepository).findByPage(1,2);//spy
     }
 
+    @Test
+    void should_return_company_when_create_given_company(){
+        //given
+        Company summer = companyRepository.create(new Company(101, "summer", new ArrayList<>()));
+
+        when(companyRepository.create(summer)).thenReturn(summer); //stub
+
+        //when
+
+
+        //then
+        Company result = companyService.create(summer);
+        assertEquals(summer, result);
+    }
 
 }

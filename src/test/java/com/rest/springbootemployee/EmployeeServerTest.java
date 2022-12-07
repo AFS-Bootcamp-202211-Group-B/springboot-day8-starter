@@ -125,4 +125,19 @@ public class EmployeeServerTest {
         verify(employeeRepository).create(employee);
     }
 
+    @Test
+    void should_delete_employee_when_delete_given_delete_employee() {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
+        employees.add(employee);
+        //when
+
+        //then
+        List<Employee> resultEmployee = employeeService.findAll();
+        employeeService.delete(employee.getId());
+        assertThat(resultEmployee, hasSize(0));
+        verify(employeeRepository).delete(employee.getId());
+    }
+
 }

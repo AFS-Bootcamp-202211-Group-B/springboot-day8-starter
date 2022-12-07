@@ -37,4 +37,19 @@ public class CompanyServiceTest {
         assertEquals(companies, result);
         verify(companyRepository).findAll();//spy
     }
+    @Test
+    void should_return_companies_by_id_when_find_by_id_given_companies(){
+        //given
+        int companyId = 1;
+        Company company = new Company(companyId,"web",new ArrayList<>());
+
+        when(companyRepository.findById(companyId)).thenReturn(company); //stub
+
+        //when
+        Company result= companyService.findById(companyId);
+
+        //then
+        assertEquals(company, result);
+        verify(companyRepository).findById(companyId);//spy
+    }
 }

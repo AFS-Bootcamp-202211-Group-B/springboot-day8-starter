@@ -130,7 +130,38 @@ public class EmployeeControllerTest {
         assertThat(employee.getAge(), equalTo(22));
         assertThat(employee.getSalary(),equalTo(10000));
         assertThat(employee.getGender(),equalTo("Male"));
-
     }
+
+    @Test
+    void should_update_employee_when_perform_put_given_employees() throws Exception {
+        //given
+        Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+
+        susan.setAge(20);
+        susan.setSalary(12000);
+        //when
+        String newEmployeeJson = new ObjectMapper().writeValueAsString(susan);
+        //then
+        client.perform(MockMvcRequestBuilders.put("/employees/{id}",susan.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newEmployeeJson))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Susan"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(20))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Female"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(12000));
+//        List<Employee> employees = employeeRepository.findAll();
+//        assertThat(employees,hasSize(1));
+//        Employee employee = employees.get(0);
+//        assertThat(employee.getName(),equalTo("Jin"));
+//        assertEquals("Jin",employee.getName());
+//        assertThat(employee.getAge(), equalTo(22));
+//        assertThat(employee.getSalary(),equalTo(10000));
+//        assertThat(employee.getGender(),equalTo("Male"));
+    }
+
+
+
+
 
 }

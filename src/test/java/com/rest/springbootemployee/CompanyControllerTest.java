@@ -1,10 +1,12 @@
 package com.rest.springbootemployee;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -12,7 +14,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -102,8 +107,8 @@ public class CompanyControllerTest {
         List<Employee> employees = new ArrayList<>();
         employees.add(susan);
         employees.add(bob);
-        Company company = companyRepository.create(new Company(10,"abc company",employees));
-        Company defCompany = companyRepository.create(new Company(11,"def company",employees));
+        companyRepository.create(new Company(10,"abc company",employees));
+        companyRepository.create(new Company(11,"def company",employees));
 
         //when & then
         client.perform(MockMvcRequestBuilders.get("/companies?page={page}&pageSize={pageSize}",1,2))
@@ -116,6 +121,32 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("def company"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].employees").isArray())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].employees").isArray());
+
+    }
+
+    @Test
+    void should_create_add_new_company_when_perform_post_given_new_company() throws Exception {
+        //given
+        Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+        Employee bob = employeeRepository.create(new Employee(11, "Bob", 23, "Male", 10000));
+        List<Employee> employees = new ArrayList<>();
+        employees.add(susan);
+        employees.add(bob);
+        Company newCompany = new Company(10,"abc company",employees);
+
+        //when
+        String newEmployeeJson = new ObjectMapper().writeValueAsString(newCompany);
+        //then
+        client.perform(MockMvcRequestBuilders.post("/companies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(newEmployeeJson))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("abc company"));
+
+        List<Company> companies = companyRepository.findAll();
+        assertThat(companies,hasSize(1));
+        Company company = companies.get(0);
+        assertThat(company.getName(),equalTo("abc company"));
 
     }
 }

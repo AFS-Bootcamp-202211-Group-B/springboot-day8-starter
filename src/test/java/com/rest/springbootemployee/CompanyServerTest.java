@@ -64,4 +64,22 @@ public class CompanyServerTest {
         //then
 
     }
+
+    @Test
+    void should_employees_when_get_by_company_id_given_companies() {
+        //given
+        List<Company> companies = new ArrayList<>();
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
+        employees.add(employee);
+        Company company = new Company(1,"abc company",employees);
+        companies.add(company);
+        when(companyRepository.getEmployees(company.getId())).thenReturn(employees); //stub
+        List<Employee> foundEmployees = companyService.getEmployees(company.getId());
+        //when
+        assertThat(foundEmployees,equalTo(employees));
+
+        //then
+        verify(companyRepository).getEmployees(company.getId());
+    }
 }

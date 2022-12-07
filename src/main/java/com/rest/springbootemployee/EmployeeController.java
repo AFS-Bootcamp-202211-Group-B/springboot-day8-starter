@@ -33,7 +33,7 @@ public class EmployeeController {
 
     @GetMapping(params = {"gender"})
     public List<Employee> getByGender(@RequestParam String gender) {
-        return employeeRepository.findByGender(gender);
+        return employeeService.findByGender(gender);
     }
 
     @PostMapping

@@ -80,4 +80,22 @@ public class EmployeeServiceTest {
         assertEquals(employee, result);
         verify(employeeRepository).findById(employeeId);//spy
     }
+
+    @Test
+    void should_return_employees_by_gender_when_find_by_gender_given_employees(){
+        //given
+        Employee femaleEmployee = new Employee(1,"Susan",22,"Female",10000);
+        List<Employee> femaleEmployees = new ArrayList<>();
+        femaleEmployees.add(femaleEmployee);
+        String Female="Female";
+
+        when(employeeRepository.findByGender(Female)).thenReturn(femaleEmployees); //stub
+
+        //when
+        List<Employee> result= employeeService.findByGender(Female);
+
+        //then
+        assertEquals(femaleEmployees, result);
+        verify(employeeRepository).findByGender(Female);//spy
+    }
 }

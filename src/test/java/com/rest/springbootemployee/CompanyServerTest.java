@@ -126,13 +126,11 @@ public class CompanyServerTest {
         Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
         Company company = new Company(1,"def company",employees);
         employees.add(employee);
-        int employeeId = 1;
-        // employees.add(employee);
 
         Company toUpdateCompany = new Company(1,"abc company",employees);
 
 
-        when(companyRepository.findById(employeeId)).thenReturn(toUpdateCompany); //stub
+        when(companyRepository.findById(company.getId())).thenReturn(toUpdateCompany); //stub
 
         //when
         Company updatedCompany = companyService.update(company.getId(), toUpdateCompany);

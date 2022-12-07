@@ -154,4 +154,29 @@ public class EmployeeServerTest {
         verify(employeeRepository).delete(employee.getId());  // spy
     }
 
+    @Test
+    void should_return_employees_when_findByPage_given_page_and_pageSize() {
+        //given
+        int page = 1;
+        int pageSize = 2;
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee(1, "Mark", 28, "Male", 2100);
+        Employee employee2 = new Employee(2, "Frank", 30, "Male", 3100);
+        employees.add(employee);
+        employees.add(employee2);
+
+        when(employeeRepository.findByPage(page, pageSize)).thenReturn(employees);
+
+        //when
+        List<Employee> result = employeeService.findByPage(page, pageSize);
+
+        //then
+        // 1. verify data
+        assertThat(result, hasSize(2));
+        assertThat(result.get(0), equalTo(employee));
+        assertThat(result.get(1), equalTo(employee2));
+        // 2. verify interaction
+        verify(employeeRepository).findByPage(page, pageSize);  // spy
+    }
+
 }

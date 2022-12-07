@@ -28,4 +28,7 @@ public class EmployeeService {
         return existingEmployee;
     }
 
+    public Employee findByID(Integer id) {
+        return employeeRepository.findById(id);
+    }
 }

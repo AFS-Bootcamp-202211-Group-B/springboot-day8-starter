@@ -20,12 +20,15 @@ public class EmployeeController {
     @GetMapping
     public List<Employee> getAll() {
         return employeeService.findAll();
-//        return employeeRepository.findAll();
+    }
+    @PutMapping("/{id}")
+    public Employee update(@PathVariable Integer id, @RequestBody Employee employee) {
+        return employeeService.update(id, employee);
     }
 
     @GetMapping("/{id}")
     public Employee getById(@PathVariable Integer id) {
-        return employeeRepository.findById(id);
+        return employeeService.findByID(id);
     }
 
     @GetMapping(params = {"gender"})
@@ -38,11 +41,6 @@ public class EmployeeController {
     public Employee add(@RequestBody Employee employee) {
         return employeeRepository.create(employee);
     }
-    @PutMapping("/{id}")
-    public Employee update(@PathVariable Integer id, @RequestBody Employee employee) {
-        return employeeService.update(id, employee);
-    }
-
 
 
     @DeleteMapping("/{id}")

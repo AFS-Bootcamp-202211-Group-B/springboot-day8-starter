@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 public class EmployeeServiceTest {
+
     //when EmployeeService.findall -> employeeRepository.findAll()
     //    return  without any change
 
@@ -47,7 +48,7 @@ public class EmployeeServiceTest {
     @Test
     void should_update_age_and_salary_when_update_given_employees(){
         //given
-        int employeeId=1;
+        int employeeId= 1;
         Employee employee = new Employee(1,"Susan",22,"Female",10000);
         when(employeeRepository.findById(employeeId)).thenReturn(employee);
         Employee updateEmployee = new Employee(1,"Susan2",222,"Male",12000);
@@ -62,5 +63,21 @@ public class EmployeeServiceTest {
         assertEquals(12000,result.getSalary());
         assertEquals("Susan",result.getName());
         assertEquals("Female",result.getGender());
+    }
+
+    @Test
+    void should_return_employees_by_id_when_find_by_id_given_employees(){
+        //given
+        int employeeId = 1;
+        Employee employee = new Employee(employeeId,"Susan",22,"Female",10000);
+
+        when(employeeRepository.findById(employeeId)).thenReturn(employee); //stub
+
+        //when
+        Employee result= employeeService.findByID(employeeId);
+
+        //then
+        assertEquals(employee, result);
+        verify(employeeRepository).findById(employeeId);//spy
     }
 }

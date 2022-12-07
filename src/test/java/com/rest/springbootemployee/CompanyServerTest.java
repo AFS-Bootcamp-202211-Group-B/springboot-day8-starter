@@ -82,4 +82,25 @@ public class CompanyServerTest {
         //then
         verify(companyRepository).getEmployees(company.getId());
     }
+    @Test
+    void should_return_by_page_when_get_by_page_given_companies() {
+        //given
+        List<Company> companies = new ArrayList<>();
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
+        employees.add(employee);
+        Company company = new Company(1,"abc company",employees);
+        Company defCompany = new Company(2,"def company",employees);
+        companies.add(company);
+        companies.add(defCompany);
+        int page = 1;
+        int pageSize = 2;
+        when(companyRepository.findByPage(page,pageSize)).thenReturn(companies); //stub
+        List<Company> foundCompanies = companyService.findByPage(page,pageSize);
+        //when
+        assertThat(foundCompanies,equalTo(companies));
+
+        //then
+        verify(companyRepository).findByPage(page,pageSize);
+    }
 }

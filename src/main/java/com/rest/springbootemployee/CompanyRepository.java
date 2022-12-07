@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 @Repository
 public class CompanyRepository {
-    private final List<Company> companies = new ArrayList<>();
+    private List<Company> companies = new ArrayList<>();
 
     public CompanyRepository() {
         ArrayList<Employee> employeesOfCompany1 = new ArrayList<>();
@@ -75,5 +75,9 @@ public class CompanyRepository {
             existingCompany.setName(company.getName());
         }
         return existingCompany;
+    }
+
+    public void clearCompanies(){
+        this.companies=new ArrayList<>();
     }
 }

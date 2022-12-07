@@ -161,6 +161,19 @@ public class EmployeeControllerTest {
     }
 
 
+    @Test
+    void should_delete_employee_when_perform_delete_given_employees() throws Exception {
+        //given
+        Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+
+        //then
+        client.perform(MockMvcRequestBuilders.delete("/employees/{id}", susan.getId()))
+                // 1. assert response status
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+        List<Employee> employees = employeeRepository.findAll();
+        assertThat(employees,hasSize(0));
+    }
+
 
 
 

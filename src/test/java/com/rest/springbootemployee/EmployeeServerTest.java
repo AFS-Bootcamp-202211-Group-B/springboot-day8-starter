@@ -139,5 +139,19 @@ public class EmployeeServerTest {
         verify(employeeRepository).create(employee);  // spy
     }
 
+    @Test
+    void should_return_void_when_delete_given_employee_id() {
+        //given
+        Employee employee = new Employee(1, "Mark", 28, "Male", 2100);
+
+        //when
+        employeeService.delete(employee.getId());
+
+        //then
+        // 1. verify data
+        assertThat(employeeRepository.findAll(), hasSize(0));
+        // 2. verify interaction
+        verify(employeeRepository).delete(employee.getId());  // spy
+    }
 
 }

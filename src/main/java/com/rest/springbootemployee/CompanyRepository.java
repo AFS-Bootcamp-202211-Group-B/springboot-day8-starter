@@ -78,5 +78,10 @@ public class CompanyRepository {
     }
 
 
+    public void clearAll() {
+        companies.clear();
+    }
+
+
 
 }

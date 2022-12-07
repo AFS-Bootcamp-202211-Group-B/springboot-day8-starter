@@ -112,5 +112,21 @@ class CompanyServiceTest {
         assertNull(updatedCompany.getEmployees());
         verify(companyRepository).findById(companyId);
     }
+    @Test
+    void should_delete_company_when_delete_given_company_id() {
+        // given
+        List<Company> companies = new ArrayList<>();
+        Company company1 = new Company(1, "one", null);
+        companies.add(company1);
+
+        when(companyRepository.findAll()).thenReturn(companies);
+        // when
+        companyService.delete(1);
+        List<Company> actualCompanyList = companyService.findAll();
+
+        // then
+        assertThat(actualCompanyList, hasSize(0));
+        verify(companyRepository).delete(1);
+    }
 
 }

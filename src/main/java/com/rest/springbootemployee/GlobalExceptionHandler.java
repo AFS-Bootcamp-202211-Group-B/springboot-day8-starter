@@ -11,5 +11,6 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void method(){
 //        return new ResponseData("400", "resource not found");
+//        return new ResponseData(400, "resource not found");
     }
 }

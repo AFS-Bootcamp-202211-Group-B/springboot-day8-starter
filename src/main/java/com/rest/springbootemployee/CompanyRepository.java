@@ -65,7 +65,7 @@ public class CompanyRepository {
         int maxId = companies.stream()
                 .mapToInt(Company::getId)
                 .max()
-                .orElse(1);
+                .orElse(0);
         return maxId + 1;
     }
 

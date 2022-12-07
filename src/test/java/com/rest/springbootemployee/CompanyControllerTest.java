@@ -60,4 +60,20 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("one"));
 
     }
+    @Test
+    void should_get_companies_when_get_company_by_page_given_companies() throws Exception {
+        //given
+        companyRepository.create(new Company(1, "one", null));
+        companyRepository.create(new Company(2, "two", null));
+        companyRepository.create(new Company(3, "three", null));
+        companyRepository.create(new Company(4, "four", null));
+
+        //when & then
+        client.perform(MockMvcRequestBuilders.get("/companies?page={page}&pageSize={pageSize}", 1, 2))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("one"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("two"));
+    }
+
 }

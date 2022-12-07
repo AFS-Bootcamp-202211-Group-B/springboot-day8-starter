@@ -114,4 +114,18 @@ public class SpringBootCompanyControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("OOCL"));
     }
+    @Test
+    void should_return_changed_company_when_perform_put_given_company_id() throws Exception {
+        //given
+        Company spring = companyRepository.create(new Company(100, "spring", new ArrayList<>()));
+        //when
+        //then
+        client.perform(MockMvcRequestBuilders.put("/companies/{id}",spring.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(spring)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("spring"));
+
+    }
 }

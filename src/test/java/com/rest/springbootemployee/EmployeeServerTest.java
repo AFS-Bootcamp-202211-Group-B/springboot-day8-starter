@@ -140,4 +140,23 @@ public class EmployeeServerTest {
         verify(employeeRepository).delete(employee.getId());
     }
 
+    @Test
+    void should_return_page_of_employees_when_find_by_pages_given_page_and_pageSize() {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        Employee susan = new Employee(10, "Susan", 22, "Female", 10000);
+        Employee bob = new Employee(11, "Bob", 23, "Male", 10000);
+        employees.add(susan);
+        employees.add(bob);
+        //when
+        when(employeeRepository.findByPage(1,2)).thenReturn(employees); //stub
+        //then
+        List<Employee> foundEmployees = employeeService.findByPage(1,2);
+        assertThat(foundEmployees,hasSize(2));
+        assertThat(foundEmployees,equalTo(employees));
+
+        verify(employeeRepository).findByPage(1,2);
+
+    }
+
 }

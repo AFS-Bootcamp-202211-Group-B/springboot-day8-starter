@@ -40,4 +40,22 @@ class CompanyServiceTest {
         assertEquals(company, returnedCompanies.get(0));
         verify(companyRepository).findAll();
     }
+
+    @Test
+    void should_get_by_id_companies_when_find_all_given_companies() {
+        // given
+        List<Company> companies = new ArrayList<>();
+        Company company1 = new Company(1, "one", null);
+        Company company2 = new Company(2, "two", null);
+        companies.add(company1);
+        companies.add(company2);
+        when(companyRepository.findById(1)).thenReturn(company1);
+
+        // when
+        Company returnedCompany = companyService.findById(1);
+
+        // then
+        assertEquals(company1, returnedCompany);
+        verify(companyRepository).findById(1);
+    }
 }

@@ -109,8 +109,6 @@ public class SpringBootEmployeeControllorTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].gender").value("M"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].salary").value(10));
 
-
-
     }
 
     //test put employee

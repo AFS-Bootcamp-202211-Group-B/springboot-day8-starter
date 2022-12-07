@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 
 @SpringBootTest
@@ -21,6 +22,9 @@ public class SpringBootCompanyControllerTests {
     MockMvc client;
     @Autowired
     CompanyRepository companyRepository;
+
+    @Autowired
+    EmployeeRepository employeeRepository;
 
     @BeforeEach
     void clean_repos(){
@@ -59,16 +63,33 @@ public class SpringBootCompanyControllerTests {
 
 
     @Test
-    void should_get_employees_by_id_when_perform() throws Exception{
+    void should_get_employees_by_company_id_when_perform() throws Exception{
+        Company spring = companyRepository.create(new Company(100, "spring", new ArrayList<>()));
+        employeeRepository.create(new Employee(spring.getId(),"Kam",23,"male",9999));
+        employeeRepository.create(new Employee(spring.getId(),"Pang",24,"female",12312412));
+        Company summer = companyRepository.create(new Company(101, "summer", new ArrayList<>()));
+
+
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}/employees",spring.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$",hasSize(0)));
+
+    }
+
+
+    @Test
+    void should_get_all_company_by_page_when_perform() throws Exception{
+
         Company spring = companyRepository.create(new Company(100, "spring", new ArrayList<>()));
         Company summer = companyRepository.create(new Company(101, "summer", new ArrayList<>()));
 
 
-        client.perform(MockMvcRequestBuilders.get("/companies/{id}",spring.getId()))
+
+        client.perform(MockMvcRequestBuilders.get("/companies?page=1&pageSize=2"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("spring"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.employees",hasSize(0)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$",hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].id", containsInAnyOrder(spring.getId(), summer.getId())));
+
 
     }
 }

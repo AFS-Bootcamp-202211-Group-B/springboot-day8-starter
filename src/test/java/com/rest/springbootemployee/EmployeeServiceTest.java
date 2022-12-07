@@ -5,6 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -104,6 +107,38 @@ class EmployeeServiceTest {
         assertThat(resultEmployeeList, hasSize(1));
         assertThat(resultEmployeeList.get(0), equalTo(employee2));
 
+    }
+
+    @Test
+    void should_add_employee_by_id_when_add_given_employees() {
+        //given
+        Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
+
+        when(employeeRepository.create(employee)).thenReturn(employee); //stub
+        //when
+        Employee resultEmployee = employeeService.create(employee);
+        //then
+        verify(employeeRepository).create(employee); //spy
+        //1. verify data
+        assertEquals(employee, resultEmployee);
+
+    }
+
+    @Test
+    void should_delete_employees_when_perform_delete_given_employees() {
+        Integer employeeId = 1;
+        Employee employee = new Employee(11,"one",21,"male",11000);
+        employeeRepository.create(new Employee(11,"one",21,"male",11000));
+        employeeRepository.create(new Employee(10,"two",22,"female",10000));
+        employeeRepository.create(new Employee(12,"three",21,"male",11000));
+
+        //when
+        employeeService.delete(employeeId);
+        //then
+
+        //1. verify data
+        assertThat(employeeRepository.findAll(), hasSize(0));
+        verify(employeeRepository).delete(employeeId); //spy
     }
 
 }

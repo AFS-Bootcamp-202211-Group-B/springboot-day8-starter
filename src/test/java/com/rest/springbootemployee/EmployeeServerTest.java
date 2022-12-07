@@ -111,5 +111,18 @@ public class EmployeeServerTest {
 
     }
 
+    @Test
+    void should_return_new_employee_when_create_given_new_employee() {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
+        //when
+        when(employeeRepository.create(employee)).thenReturn(employee); //stub
+        //then
+        Employee addedEmployee = employeeService.create(employee);
+        assertThat(addedEmployee,equalTo(employee));
+
+        verify(employeeRepository).create(employee);
+    }
 
 }

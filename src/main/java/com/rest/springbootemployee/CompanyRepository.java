@@ -80,4 +80,8 @@ public class CompanyRepository {
     public void clearCompanies(){
         this.companies=new ArrayList<>();
     }
+
+    public void clearAll() {
+        companies = new ArrayList<>();
+    }
 }

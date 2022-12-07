@@ -1,7 +1,6 @@
 package com.rest.springbootemployee;
 
 import com.jayway.jsonpath.JsonPath;
-import com.rest.springbootemployee.Employee;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +14,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class SpringBootEmployeeApplicationTests {
+class EmployeeControllerTest {
 	@Autowired
 	MockMvc client;
 

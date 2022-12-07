@@ -18,4 +18,12 @@ public class CompanyService {
     public Company findById(Integer id){
         return companyRepository.findById(id);
     }
+
+    public List<Company> findByPage(int page, int pageSize) {
+        return companyRepository.findByPage(page,pageSize);
+    }
+
+    public Company create(Company company) {
+        return companyRepository.create(company);
+    }
 }

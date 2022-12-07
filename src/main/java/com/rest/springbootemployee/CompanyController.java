@@ -34,7 +34,7 @@ public class CompanyController {
 
     @GetMapping(params = {"page", "pageSize"})
     public List<Company> getByPage(Integer page, Integer pageSize) {
-        return companyRepository.findByPage(page, pageSize);
+        return companyService.findByPage(page, pageSize);
     }
 
     @PostMapping

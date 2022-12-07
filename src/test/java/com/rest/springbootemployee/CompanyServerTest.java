@@ -118,4 +118,27 @@ public class CompanyServerTest {
 
         verify(companyRepository).create(company);
     }
+
+    @Test
+    void should_update_only_age_and_salary_when_update_all_give_employees() {
+        //given
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
+        Company company = new Company(1,"def company",employees);
+        employees.add(employee);
+        int employeeId = 1;
+        // employees.add(employee);
+
+        Company toUpdateCompany = new Company(1,"abc company",employees);
+
+
+        when(companyRepository.findById(employeeId)).thenReturn(toUpdateCompany); //stub
+
+        //when
+        Company updatedCompany = companyService.update(company.getId(), toUpdateCompany);
+        //then
+        verify(companyRepository).findById(company.getId());  // spy
+        assertThat(updatedCompany.getName(),equalTo("abc company"));
+
+    }
 }

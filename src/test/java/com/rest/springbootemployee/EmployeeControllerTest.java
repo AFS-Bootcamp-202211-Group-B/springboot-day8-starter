@@ -1,17 +1,22 @@
 package com.rest.springbootemployee;
 
-import com.rest.springbootemployee.Employee;
-import com.rest.springbootemployee.EmployeeRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -102,5 +107,30 @@ public class EmployeeControllerTest {
         //then
     }
 
+    @Test
+    void should_create_add_new_employee_when_perform_post_given_new_employees() throws Exception {
+        //given
+        Employee newEmployee = new Employee(1, "Jin", 22, "Male", 10000);
+        //when
+        String newEmployeeJson = new ObjectMapper().writeValueAsString(newEmployee);
+        //then
+        client.perform(MockMvcRequestBuilders.post("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(newEmployeeJson))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Jin"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(22))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value("Male"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(10000));
+        List<Employee> employees = employeeRepository.findAll();
+        assertThat(employees,hasSize(1));
+        Employee employee = employees.get(0);
+        assertThat(employee.getName(),equalTo("Jin"));
+        assertEquals("Jin",employee.getName());
+        assertThat(employee.getAge(), equalTo(22));
+        assertThat(employee.getSalary(),equalTo(10000));
+        assertThat(employee.getGender(),equalTo("Male"));
+
+    }
 
 }

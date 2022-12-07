@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class EmployeeServiceTest {
@@ -103,7 +102,7 @@ public class EmployeeServiceTest {
     void should_delete_employees_id_when_delete_given_employees(){
         //given
         Employee employee = new Employee(1,"Susan",22,"Female",10000);
-
+        doNothing().when(employeeRepository).delete(employee.getId());
         //when
         employeeService.delete(1);
 

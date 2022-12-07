@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class CompanyServiceTest {
@@ -133,5 +132,18 @@ public class CompanyServiceTest {
         verify(companyRepository).findById(companyId);
         assertEquals("newCompanyName",result.getName());
         assertEquals(employeesOfCompany1,result.getEmployees());
+    }
+
+    @Test
+    void should_delete_company_by_id_when_delete_given_companies(){
+        //given
+        Company company1 = new Company(1,"company1",new ArrayList<>());
+        doNothing().when(companyRepository).delete(company1.getId());
+
+        //when
+        companyService.delete(company1.getId());
+
+        //then
+        verify(companyRepository).delete(company1.getId());//spy
     }
 }

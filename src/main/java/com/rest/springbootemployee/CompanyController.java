@@ -19,12 +19,12 @@ public class CompanyController {
 
     @GetMapping
     public List<Company> getAll() {
-        return companyRepository.findAll();
+        return companyService.findAll();
     }
 
     @GetMapping("/{id}")
     public Company getById(@PathVariable Integer id) {
-        return companyRepository.findById(id);
+        return companyService.findById(id);
     }
 
     @GetMapping("/{id}/employees")
@@ -40,17 +40,17 @@ public class CompanyController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public Company create(@RequestBody Company company) {
-        return companyRepository.create(company);
+        return companyService.create(company);
     }
 
     @PutMapping("/{id}")
     public Company update(@PathVariable Integer id, @RequestBody Company company) {
-        return companyRepository.update(id, company);
+        return companyService.update(id, company);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompany(@PathVariable Integer id) {
-        companyRepository.delete(id);
+        companyService.delete(id);
     }
 }

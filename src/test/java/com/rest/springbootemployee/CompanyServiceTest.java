@@ -115,11 +115,9 @@ class CompanyServiceTest {
     @Test
     void should_delete_company_when_delete_given_company_id() {
         // given
-        List<Company> companies = new ArrayList<>();
         Company company1 = new Company(1, "one", null);
-        companies.add(company1);
 
-        when(companyRepository.findAll()).thenReturn(companies);
+        when(companyRepository.findById(1)).thenReturn(company1);
         // when
         companyService.delete(1);
         List<Company> actualCompanyList = companyService.findAll();

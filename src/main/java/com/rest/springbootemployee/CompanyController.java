@@ -11,8 +11,9 @@ public class CompanyController {
     private CompanyRepository companyRepository;
     private CompanyService companyService;
 
-    public CompanyController(CompanyRepository CompanyRepository) {
+    public CompanyController(CompanyRepository CompanyRepository, CompanyService companyService) {
         this.companyRepository = CompanyRepository;
+        this.companyService = companyService;
     }
 
     @GetMapping
@@ -22,7 +23,7 @@ public class CompanyController {
 
     @GetMapping("/{id}")
     public Company getById(@PathVariable Integer id) {
-        return companyRepository.findById(id);
+        return companyService.findById(id);
     }
 
     @GetMapping("/{id}/employees")

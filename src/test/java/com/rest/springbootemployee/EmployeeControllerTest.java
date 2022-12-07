@@ -27,6 +27,7 @@ public class EmployeeControllerTest {
 
     @Autowired
     EmployeeRepository employeeRepository;
+    EmployeeService employeeService;
 
     @BeforeEach
     void cleanRepository(){

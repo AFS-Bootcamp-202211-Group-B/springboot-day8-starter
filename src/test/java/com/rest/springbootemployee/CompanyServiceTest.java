@@ -13,6 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -58,4 +59,42 @@ class CompanyServiceTest {
         assertEquals(company1, returnedCompany);
         verify(companyRepository).findById(1);
     }
+    @Test
+    void should_get_companies_by_page_query_when_get_given_companies_and_page_and_page_size() {
+        // given
+        List<Company> companies = new ArrayList<>();
+        Company company1 = new Company(1, "one", null);
+        Company company2 = new Company(2, "two", null);
+        companies.add(company1);
+        companies.add(company2);
+
+        int page = 1;
+        int pageSize = 2;
+        when(companyRepository.findByPage(page, pageSize)).thenReturn(companies);
+        // when
+        List<Company> returnedCompanies = companyService.findByPage(page, pageSize);
+
+        // then
+        assertEquals(2, returnedCompanies.size());
+        assertEquals(1, returnedCompanies.get(0).getId());
+        assertEquals(2, returnedCompanies.get(1).getId());
+        assertEquals("one", returnedCompanies.get(0).getName());
+        assertEquals("two", returnedCompanies.get(1).getName());
+        verify(companyRepository).findByPage(page, pageSize);
+    }
+    @Test
+    void should_add_company_when_post_given_company() {
+        // given
+        Company company = new Company(1, "one", null);
+        when(companyRepository.create(company)).thenReturn(company);
+        // when
+        Company postedCompany = companyService.create(company);
+
+        // then
+        assertEquals(1, postedCompany.getId());
+        assertEquals("one", postedCompany.getName());
+        assertNull(postedCompany.getEmployees());
+        verify(companyRepository).create(company);
+    }
+
 }

@@ -12,6 +12,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -25,7 +26,7 @@ public class EmployeeServiceTest {
     EmployeeService employeeService;
 
     @Test
-    void should_update_only_return_all_employees_when_find_all_given_em()
+    void should_update_only_return_all_employees_when_updated_given_em()
     {
         //List<Employee> employees = new ArrayList<>();
         int employeesId = 1;
@@ -47,6 +48,24 @@ public class EmployeeServiceTest {
 
         verify(employeeRepository).findById(employeesId);
     }
+
+
+    @Test
+    void should_return_employees_by_id_when_find_by_id_given_employees(){
+        //given
+        int employeeId = 1;
+        Employee employee = new Employee(employeeId,"Susan",22,"Female",10000);
+
+        when(employeeRepository.findById(employeeId)).thenReturn(employee); //stub
+
+        //when
+        Employee result= employeeService.findById(employeeId);
+
+        //then
+        assertEquals(employee, result);
+        verify(employeeRepository).findById(employeeId);//spy
+    }
+
 }
 
 //verify interaction

@@ -24,7 +24,7 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     public Employee getById(@PathVariable Integer id) {
-        return employeeRepository.findById(id);
+        return employeeservice.findById(id);
     }
 
     @GetMapping(params = {"gender"})
@@ -37,6 +37,7 @@ public class EmployeeController {
     public Employee add(@RequestBody Employee employee) {
         return employeeRepository.create(employee);
     }
+
     @PutMapping("/{id}")
     public Employee update(@PathVariable Integer id, @RequestBody Employee employee) {
         //return employeeRepository.update(id, employee);

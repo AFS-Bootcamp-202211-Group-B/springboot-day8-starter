@@ -45,4 +45,18 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].employees",hasSize(0)));
 
     }
+
+    @Test
+    void should_get_companies_by_id_when_perform_get_by_id_given_companies() throws Exception{
+        //given
+        Company test1=companyRepository.create(new Company(100, "spring", new ArrayList<>()));
+        Company test2=companyRepository.create(new Company(101, "spring", new ArrayList<>()));
+        //when
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}",test1.getId()))
+                //Then
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("spring"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees",hasSize(0)));
+    }
 }

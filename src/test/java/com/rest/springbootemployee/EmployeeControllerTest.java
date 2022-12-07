@@ -52,7 +52,7 @@ class EmployeeControllerTest {
 
 	}
 	@Test
-	void should_get_employee_by_id_when_perfrm_get_by_id_given_employees() throws Exception{
+	void should_get_employee_by_id_when_perform_get_by_id_given_employees() throws Exception{
 		//given
 		Employee test1=employeeRepository.create(new Employee(10,"test",22,"Female",10000));
 		Employee test2=employeeRepository.create(new Employee(10,"test",22,"Female",10001));

@@ -1,11 +1,14 @@
 package com.rest.springbootemployee;
 
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -96,6 +99,39 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].id",containsInAnyOrder(test1.getId(),test2.getId())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].name",containsInAnyOrder(test1.getName(),test2.getName())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[*].employees",containsInAnyOrder(test1.getEmployees(),test2.getEmployees())));
+
+    }
+
+    @Test
+    void should_create_new_employee_when_perform_create_given_employees() throws Exception{
+        //given
+        String newCompaniesJsonString="{\"name\":\"web\",\"employees\":[{\"id\":10,\"name\":\"Fisher\",\"age\":21,\"gender\":\"male\",\"salary\":65000}]}";
+        //when
+        MvcResult result = client.perform(MockMvcRequestBuilders.post("/companies").content(newCompaniesJsonString).contentType(MediaType.APPLICATION_JSON))
+                //Then
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("web"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees",hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].id").value(10))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].name").value("Fisher"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].age").value(21))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].gender").value("male"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].salary").value(65000))
+                .andReturn();
+//
+        int newCompanyId = JsonPath.read(result.getResponse().getContentAsString(),"$.id");
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}",newCompanyId))
+                //Then
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("web"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees",hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].id").value(10))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].name").value("Fisher"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].age").value(21))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].gender").value("male"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].salary").value(65000));
 
     }
 }

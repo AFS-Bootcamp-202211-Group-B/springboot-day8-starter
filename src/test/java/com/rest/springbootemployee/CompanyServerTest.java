@@ -103,4 +103,19 @@ public class CompanyServerTest {
         //then
         verify(companyRepository).findByPage(page,pageSize);
     }
+
+    @Test
+    void should_return_new_company_when_create_given_new_company() {
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee(10, "Susan", 22, "Female", 10000);
+        employees.add(employee);
+        Company company = new Company(1,"abc company",employees);
+        //when
+        when(companyRepository.create(company)).thenReturn(company); //stub
+        //then
+        Company addedCompany = companyService.create(company);
+        assertThat(addedCompany,equalTo(company));
+
+        verify(companyRepository).create(company);
+    }
 }

@@ -1,7 +1,9 @@
 package com.rest.springbootemployee;
 
-import java.util.List;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+@Service
 public class EmployeeService { //SUT
 
     private EmployeeRepository employeeRepository; // DOC

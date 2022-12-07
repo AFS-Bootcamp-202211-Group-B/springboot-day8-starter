@@ -4,7 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,5 +93,24 @@ public class CompanyServiceTest {
         //then
         assertEquals(companies, result);
         verify(companyRepository).findByPage(page,pageSize);//spy
+    }
+
+
+    @Test
+    void should_return_new_company_when_create_given_companies(){
+        //given
+        List<Employee> employeesOfCompany1 = new ArrayList<>();
+        employeesOfCompany1.add(new Employee(1, "Carlos", 26, "Male", 70000));
+        employeesOfCompany1.add(new Employee(2, "Nicole", 22, "Female", 80000));
+        Company company1 = new Company(1,"company1",employeesOfCompany1);
+
+        when(companyRepository.create(company1)).thenReturn(company1); //stub
+
+        //when
+        Company result= companyService.create(company1);
+
+        //then
+        assertEquals(company1, result);
+        verify(companyRepository).create(company1);//spy
     }
 }

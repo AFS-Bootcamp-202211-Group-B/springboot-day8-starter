@@ -141,4 +141,32 @@ class EmployeeServiceTest {
         verify(employeeRepository).delete(employeeId); //spy
     }
 
+    @Test
+    void should_get_employees_by_page_when_perform_get_given_employees() throws Exception {
+        // given
+        Employee employee1 = new Employee(11,"one",21,"male",11000);
+        Employee employee2 = new Employee(10,"two",22,"female",10000);
+
+        employeeRepository.create(new Employee(12,"three",21,"male",11000));
+        employeeRepository.create(new Employee(12,"four",21,"male",11000));
+        employeeRepository.create(employee1);
+        employeeRepository.create(employee2);
+
+        List<Employee> employees = new ArrayList<>();
+        employees.add(employee1);
+        employees.add(employee2);
+
+        when(employeeRepository.findByPage(2,2)).thenReturn(employees); //stub
+        //when
+        List<Employee> result = employeeService.findByPage(2,2);
+        //then
+        //1. verify data
+        assertThat(result, hasSize(2));
+        assertThat(result.get(0), equalTo(employee1));
+        assertEquals(employees, result);
+        //2.verify interaction
+        verify(employeeRepository).findByPage(2,2); //spy
+
+    }
+
 }

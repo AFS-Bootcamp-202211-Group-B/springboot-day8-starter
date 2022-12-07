@@ -83,4 +83,27 @@ class EmployeeServiceTest {
 
     }
 
+    @Test
+    void should_find_employee_by_gender_when_find_given_employees() {
+        //given
+        String gender = "Male";
+        List<Employee> employees = new ArrayList<>();
+        Employee employee1 = new Employee(10, "Susan", 22, "Female", 10000);
+        Employee employee2 = new Employee(11, "Tom", 23, "Male", 12000);
+        employees.add(employee1);
+        employees.add(employee2);
+        List<Employee> maleEmployees = new ArrayList<>();
+        maleEmployees.add(employee2);
+
+        when(employeeRepository.findByGender(gender)).thenReturn(maleEmployees); //stub
+        //when
+        List<Employee> resultEmployeeList = employeeService.findByGender(gender);
+        //then
+        verify(employeeRepository).findByGender(gender); //spy
+        //1. verify data
+        assertThat(resultEmployeeList, hasSize(1));
+        assertThat(resultEmployeeList.get(0), equalTo(employee2));
+
+    }
+
 }

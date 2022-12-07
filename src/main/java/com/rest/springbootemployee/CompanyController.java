@@ -10,13 +10,16 @@ import java.util.List;
 public class CompanyController {
     private CompanyRepository companyRepository;
 
-    public CompanyController(CompanyRepository CompanyRepository) {
-        this.companyRepository = CompanyRepository;
+    private CompanyService companyService;
+
+    public CompanyController(CompanyRepository companyRepository, CompanyService companyService) {
+        this.companyRepository = companyRepository;
+        this.companyService = companyService;
     }
 
     @GetMapping
     public List<Company> getAll() {
-        return companyRepository.findAll();
+        return companyService.findAll();
     }
 
     @GetMapping("/{id}")

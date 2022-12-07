@@ -52,4 +52,22 @@ public class CompanyServiceTest {
         assertEquals(company, result);
         verify(companyRepository).findById(companyId);//spy
     }
+
+    @Test
+    void should_return_employee_by_company_id_when_get_employees_given_companies(){
+        //given
+        int companyId = 1;
+        List<Employee> employeesOfCompany1 = new ArrayList<>();
+        employeesOfCompany1.add(new Employee(1, "Carlos", 26, "Male", 70000));
+        employeesOfCompany1.add(new Employee(2, "Nicole", 22, "Female", 80000));
+
+        when(companyRepository.getEmployees(companyId)).thenReturn(employeesOfCompany1); //stub
+
+        //when
+        List<Employee> result= companyService.getEmployees(companyId);
+
+        //then
+        assertEquals(employeesOfCompany1, result);
+        verify(companyRepository).getEmployees(companyId);//spy
+    }
 }

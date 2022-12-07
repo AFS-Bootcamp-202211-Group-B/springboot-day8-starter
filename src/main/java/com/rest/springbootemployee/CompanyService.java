@@ -35,4 +35,17 @@ public class CompanyService {
     public Company create(Company company) {
         return companyRepository.create(company);
     }
+
+
+    public Company update(Integer id, Company company) {
+        Company existingCompany = companyRepository.findById(id);
+        if (company.getName() != null) {
+            existingCompany.setName(company.getName());
+        }
+        return existingCompany;
+    }
+
+    public Company delete(Integer id) {
+        return companyRepository.delete(id);
+    }
 }

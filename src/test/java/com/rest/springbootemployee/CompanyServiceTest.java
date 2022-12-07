@@ -12,6 +12,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -108,4 +109,33 @@ public class CompanyServiceTest {
         assertEquals(summer, result);
     }
 
+    @Test
+    void should_update_name_when_update_given_companies(){
+        //given
+        Company summer = new Company(1, "summer", new ArrayList<>());
+        when(companyRepository.findById(1)).thenReturn(summer);
+        Company spring = new Company(1, "spring", new ArrayList<>());
+
+        //when
+        Company result = companyService.update(1,spring);
+
+
+        //then
+        verify(companyRepository).findById(1);
+        assertEquals("spring",result.getName());
+
+    }
+
+    @Test
+    void should_return_null_and_delete_when_delete_by_gender_given_employees(){
+        //given
+        Company summer = new Company(101, "summer", new ArrayList<>());
+
+        //when
+        Company result = companyService.delete(1);
+
+        //then
+        assertNull(result);
+        verify(companyRepository).delete(1);//spy
+    }
 }

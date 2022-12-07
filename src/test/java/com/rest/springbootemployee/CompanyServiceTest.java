@@ -127,7 +127,7 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_return_null_and_delete_when_delete_by_gender_given_employees(){
+    void should_return_null_and_delete_when_delete_by_gender_given_company(){
         //given
         Company summer = new Company(101, "summer", new ArrayList<>());
 

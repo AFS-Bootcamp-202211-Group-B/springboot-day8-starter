@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -186,6 +187,16 @@ public class SpringBootEmployeeControllorTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$",hasSize(0)));
     }
 
+    @Test
+    void should_return_notfound_when_perform_get_given_employee_falseId() throws Exception {
+        //given
+        Employee susan = employeeRepository.create(new Employee(10,"Susan",22,"F",1000));
+        employeeRepository.delete(susan.getId());
+        //when
+        //then
+        client.perform(MockMvcRequestBuilders.get("/employees/{id}",susan.getId()))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 
 
 }

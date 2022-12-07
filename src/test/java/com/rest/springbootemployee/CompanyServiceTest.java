@@ -96,5 +96,21 @@ class CompanyServiceTest {
         assertNull(postedCompany.getEmployees());
         verify(companyRepository).create(company);
     }
+    @Test
+    void should_update_company_name_when_put_given_company_and_id() {
+        // given
+        int companyId = 1;
+        Company company = new Company(companyId, "one", null);
+        Company toUpdateCompany = new Company(companyId, "two", null);
+        when(companyRepository.findById(companyId)).thenReturn(company);
+        // when
+        Company updatedCompany = companyService.update(companyId, toUpdateCompany);
+
+        // then
+        assertEquals(companyId, updatedCompany.getId());
+        assertEquals("two", updatedCompany.getName());
+        assertNull(updatedCompany.getEmployees());
+        verify(companyRepository).findById(companyId);
+    }
 
 }

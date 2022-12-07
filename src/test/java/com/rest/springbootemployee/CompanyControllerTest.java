@@ -45,7 +45,7 @@ public class CompanyControllerTest {
     }
 
     @Test
-    void should_get_companies_by_id_when_perform_get_given_companies() throws Exception {
+    void should_get_company_by_id_when_perform_get_given_companies() throws Exception {
         // given
         Company company1 = new Company(1, "one", null);
         Company company2 = new Company(2, "two", null);

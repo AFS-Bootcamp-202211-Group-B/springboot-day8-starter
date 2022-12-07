@@ -42,7 +42,7 @@ class CompanyServiceTest {
     }
 
     @Test
-    void should_get_by_id_companies_when_find_all_given_companies() {
+    void should_get_company_by_id_when_find_all_given_companies() {
         // given
         List<Company> companies = new ArrayList<>();
         Company company1 = new Company(1, "one", null);

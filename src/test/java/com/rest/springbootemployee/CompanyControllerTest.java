@@ -94,4 +94,28 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(10000));
 
     }
+
+    @Test
+    void should_get_companies_by_page_when_perform_get_by_page_given_Companies() throws Exception {
+        Employee susan = employeeRepository.create(new Employee(10, "Susan", 22, "Female", 10000));
+        Employee bob = employeeRepository.create(new Employee(11, "Bob", 23, "Male", 10000));
+        List<Employee> employees = new ArrayList<>();
+        employees.add(susan);
+        employees.add(bob);
+        Company company = companyRepository.create(new Company(10,"abc company",employees));
+        Company defCompany = companyRepository.create(new Company(11,"def company",employees));
+
+        //when & then
+        client.perform(MockMvcRequestBuilders.get("/companies?page={page}&pageSize={pageSize}",1,2))
+                // 1. assert response status
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                // 2. assert response data
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("abc company"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("def company"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].employees").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].employees").isArray());
+
+    }
 }

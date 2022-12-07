@@ -59,4 +59,43 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("spring"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.employees",hasSize(0)));
     }
+    @Test
+    void should_get_employees_when_perform_get_employees_by_id_given_companies_and_employees() throws Exception{
+        //given
+        ArrayList<Employee> employeesOfCompany1 = new ArrayList<>();
+        employeesOfCompany1.add(new Employee(1, "Carlos", 26, "Male", 70000));
+        employeesOfCompany1.add(new Employee(2, "Nicole", 22, "Female", 80000));
+        Company test1=companyRepository.create(new Company(100, "spring", employeesOfCompany1));
+
+        //when
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}/employees",test1.getId()))
+                //Then
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$",hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("Carlos"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value(26))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].salary").value(70000))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("Nicole"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].age").value(22))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].salary").value(80000));
+
+    }
+
+    @Test
+    void should_get_companies_by_page_when_perform_get_by_page_given_companies() throws Exception{
+        //given
+        Company test1=companyRepository.create(new Company(100, "spring", new ArrayList<>()));
+        Company test2=companyRepository.create(new Company(101, "spring2", new ArrayList<>()));
+        Company test3=companyRepository.create(new Company(102, "spring3", new ArrayList<>()));
+
+        //when
+        client.perform(MockMvcRequestBuilders.get("/companies?page=1&pageSize=2"))
+                //Then
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$",hasSize(2)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].id",containsInAnyOrder(test1.getId(),test2.getId())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].name",containsInAnyOrder(test1.getName(),test2.getName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[*].employees",containsInAnyOrder(test1.getEmployees(),test2.getEmployees())));
+
+    }
 }

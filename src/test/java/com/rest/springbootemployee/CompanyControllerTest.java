@@ -103,7 +103,7 @@ public class CompanyControllerTest {
     }
 
     @Test
-    void should_create_new_employee_when_perform_create_given_employees() throws Exception{
+    void should_create_new_company_when_perform_create_given_companies() throws Exception{
         //given
         String newCompaniesJsonString="{\"name\":\"web\",\"employees\":[{\"id\":10,\"name\":\"Fisher\",\"age\":21,\"gender\":\"male\",\"salary\":65000}]}";
         //when
@@ -132,6 +132,27 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].age").value(21))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].gender").value("male"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.employees[0].salary").value(65000));
+
+    }
+
+    @Test
+    void should_update_company_when_perform_put_given_companies() throws Exception{
+        //given
+        Company test1=companyRepository.create(new Company(100, "spring", new ArrayList<>()));
+        String newCompaniesJsonString="{\"name\":\"web\"}";
+        //when
+        client.perform(MockMvcRequestBuilders.put("/companies/{id}",test1.getId())
+                        .content(newCompaniesJsonString).contentType(MediaType.APPLICATION_JSON))
+        //Then
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("web"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees").value(new ArrayList<>()));
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}",test1.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("web"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees").value(new ArrayList<>()));
 
     }
 }

@@ -155,4 +155,20 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.employees").value(new ArrayList<>()));
 
     }
+    @Test
+    void should_delete_company_by_id_when_perform_delete_given_companies() throws Exception{
+        //given
+        Company test1=companyRepository.create(new Company(100, "spring", new ArrayList<>()));
+        //when
+        client.perform(MockMvcRequestBuilders.delete("/companies/{id}",test1.getId()))
+                //Then
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+
+        client.perform(MockMvcRequestBuilders.get("/companies"))
+                //Then
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$",hasSize(0)));
+
+    }
 }

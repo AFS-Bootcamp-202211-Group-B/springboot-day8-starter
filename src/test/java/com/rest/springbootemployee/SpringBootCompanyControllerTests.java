@@ -41,4 +41,34 @@ public class SpringBootCompanyControllerTests {
 
 
     }
+
+
+    @Test
+    void should_get_company_by_id_when_perform() throws Exception{
+        Company spring = companyRepository.create(new Company(100, "spring", new ArrayList<>()));
+        Company summer = companyRepository.create(new Company(101, "summer", new ArrayList<>()));
+
+
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}",spring.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("spring"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees",hasSize(0)));
+
+    }
+
+
+    @Test
+    void should_get_employees_by_id_when_perform() throws Exception{
+        Company spring = companyRepository.create(new Company(100, "spring", new ArrayList<>()));
+        Company summer = companyRepository.create(new Company(101, "summer", new ArrayList<>()));
+
+
+        client.perform(MockMvcRequestBuilders.get("/companies/{id}",spring.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("spring"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.employees",hasSize(0)));
+
+    }
 }

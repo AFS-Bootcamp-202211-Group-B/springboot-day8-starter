@@ -72,27 +72,24 @@ public class EmployeeServerTest {
 
 
         //then
-        // 1. verify data
-    //     assertThat(result, hasSize(1));
-    //    assertThat(result.get(0), equalTo(employee));
-        //assertEquals(employees, result);
-        // 2. verify interaction
+
         verify(employeeRepository).findById(employeeId);  // spy
-
-        assertEquals(updatedEmployee.getAge(), 23);
-        assertEquals(updatedEmployee.getSalary(), 12000);
-
-    }
-
-    @Test
-    void should_when_given() {
-        //given
-
-        //when
-
-        //then
+        assertThat(updatedEmployee.getAge(),equalTo(23));
+        assertThat(updatedEmployee.getSalary(),equalTo(12000));
+//        assertEquals(updatedEmployee.getAge(), 23);
+//        assertEquals(updatedEmployee.getSalary(), 12000);
 
     }
+
+//    @Test
+//    void should_when_given() {
+//        //given
+//
+//        //when
+//
+//        //then
+//
+//    }
 
 
 }

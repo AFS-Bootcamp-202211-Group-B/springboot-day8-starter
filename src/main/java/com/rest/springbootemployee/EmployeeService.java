@@ -16,4 +16,16 @@ public class EmployeeService {
 
         return employeeRepository.findAll();
     }
+
+    public Employee update(Integer id, Employee employee) {
+        Employee existingEmployee = employeeRepository.findById(id);
+        if (employee.getAge() != null) {
+            existingEmployee.setAge(employee.getAge());
+        }
+        if (employee.getSalary() != null) {
+            existingEmployee.setSalary(employee.getSalary());
+        }
+        return existingEmployee;
+    }
+
 }

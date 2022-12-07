@@ -40,4 +40,27 @@ public class EmployeeServiceTest {
         assertEquals(employees, result);
         verify(employeeRepository).findAll();//spy
     }
+
+
+//    EmployeeService.update  --> employeeRepository.findById(id)
+//    only age and salary will be updated, other remain the same
+    @Test
+    void should_update_age_and_salary_when_update_given_employees(){
+        //given
+        int employeeId=1;
+        Employee employee = new Employee(1,"Susan",22,"Female",10000);
+        when(employeeRepository.findById(employeeId)).thenReturn(employee);
+        Employee updateEmployee = new Employee(1,"Susan2",222,"Male",12000);
+
+        //when
+        Employee result = employeeService.update(employeeId,updateEmployee);
+
+
+        //then
+        verify(employeeRepository).findById(employeeId);
+        assertEquals(222,result.getAge());
+        assertEquals(12000,result.getSalary());
+        assertEquals("Susan",result.getName());
+        assertEquals("Female",result.getGender());
+    }
 }

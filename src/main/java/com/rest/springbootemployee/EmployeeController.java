@@ -40,15 +40,11 @@ public class EmployeeController {
     }
     @PutMapping("/{id}")
     public Employee update(@PathVariable Integer id, @RequestBody Employee employee) {
-        Employee existingEmployee = employeeRepository.findById(id);
-        if (employee.getAge() != null) {
-            existingEmployee.setAge(employee.getAge());
-        }
-        if (employee.getSalary() != null) {
-            existingEmployee.setSalary(employee.getSalary());
-        }
-        return existingEmployee;
+        return employeeService.update(id, employee);
     }
+
+
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer id) {

@@ -1,10 +1,12 @@
 package com.rest.springbootemployee;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -12,7 +14,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -75,5 +80,27 @@ public class CompanyControllerTest {
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value("one"))
             .andExpect(MockMvcResultMatchers.jsonPath("$[1].name").value("two"));
     }
+    @Test
+    void should_add_new_company_when_post_given_company() throws Exception {
+        //given
+        Company company = new Company(1, "one", null);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        //when & then
+        client.perform(MockMvcRequestBuilders.post("/companies")
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(objectMapper.writeValueAsString(company)))
+            .andExpect(MockMvcResultMatchers.status().isCreated())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("one"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.employees").doesNotExist());
+
+        List<Company> companies = companyRepository.findAll();
+        assertThat(companies, hasSize(1));
+        Company addedCompany= companies.get(0);
+        assertThat(addedCompany.getName(), equalTo("one"));
+        assertNull(addedCompany.getEmployees());
+    }
+
 
 }

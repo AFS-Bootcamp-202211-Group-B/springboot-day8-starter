@@ -45,7 +45,7 @@ public class EmployeeRepository {
         int maxId = employees.stream()
                 .mapToInt(employee -> employee.getId())
                 .max()
-                .orElse(1);
+                .orElse(0);
         return maxId + 1;
     }
 
@@ -72,12 +72,8 @@ public class EmployeeRepository {
                 .limit(pageSize)
                 .collect(Collectors.toList());
     }
+    public void clearAll(){
+        employees.clear();
+    }
 }
 
-//{
-//        "id": 5,
-//        "name": "Lily",
-//        "age": 20,
-//        "gender": "Female",
-//        "salary": 8000
-//        }

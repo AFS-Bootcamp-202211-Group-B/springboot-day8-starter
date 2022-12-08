@@ -8,16 +8,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
-
+    private EmployeeService employeeService;
     private EmployeeRepository employeeRepository;
 
-    public EmployeeController(EmployeeRepository employeeRepository) {
+    public EmployeeController(EmployeeService employeeService, EmployeeRepository employeeRepository) {
+        this.employeeService = employeeService;
         this.employeeRepository = employeeRepository;
     }
 
     @GetMapping
     public List<Employee> getAll() {
-        return employeeRepository.findAll();
+        return employeeService.findAll();
+    //    return employeeRepository.findAll();
     }
 
     @GetMapping("/{id}")
@@ -37,7 +39,7 @@ public class EmployeeController {
     }
     @PutMapping("/{id}")
     public Employee update(@PathVariable Integer id, @RequestBody Employee employee) {
-        return employeeRepository.update(id, employee);
+        return employeeService.update(id, employee);
     }
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

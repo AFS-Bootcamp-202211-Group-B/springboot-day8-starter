@@ -45,9 +45,10 @@ public class CompanyRepository {
                 .orElseThrow(NoCompanyFoundException::new);
     }
 
-    public void delete(Integer id) {
+    public Company delete(Integer id) {
         Company existingCompany = findById(id);
         companies.remove(existingCompany);
+        return existingCompany;
     }
 
     public List<Employee> getEmployees(Integer id) {
@@ -76,4 +77,12 @@ public class CompanyRepository {
         }
         return existingCompany;
     }
+
+
+    public void clearAll() {
+        companies.clear();
+    }
+
+
+
 }

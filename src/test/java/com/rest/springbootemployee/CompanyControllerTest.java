@@ -118,7 +118,7 @@ public class CompanyControllerTest {
         List<Company> companies = companyRepository.findAll();
         assertThat(companies, hasSize(1));
         Company repoCompany= companies.get(0);
-        assertThat(repoCompany.getName(), equalTo("Company"));
+        assertThat(repoCompany.getName(), equalTo("company"));
         assertThat(repoCompany.getEmployees(), equalTo(employees));
     }
 

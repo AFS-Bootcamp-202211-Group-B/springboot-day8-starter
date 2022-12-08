@@ -76,6 +76,7 @@ public class CompanyServerTest {
         //given
         ArrayList<Employee> employees = new ArrayList<>();
         Employee employee = new Employee(1, "Susan", 22, "Female", 10000);
+        employees.add(employee);
         employees.add(new Employee(2, "gogo", 23, "Female", 3000));
 
         int id = 1;
